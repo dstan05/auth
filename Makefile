@@ -15,13 +15,13 @@ get-deps:
 	go get -u google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
 generate:
-	make generate-note-api
+	make generate-auth-api
 
-generate-note-api:
-	mkdir -p pkg/v1
-	protoc --proto_path api/v1 \
-	--go_out=pkg/v1 --go_opt=paths=source_relative \
+generate-auth-api:
+	mkdir -p pkg/grpc
+	protoc --proto_path api/user_v1 \
+	--go_out=pkg/grpc --go_opt=paths=source_relative \
 	--plugin=protoc-gen-go=bin/protoc-gen-go \
-	--go-grpc_out=pkg/v1 --go-grpc_opt=paths=source_relative \
+	--go-grpc_out=pkg/grpc --go-grpc_opt=paths=source_relative \
 	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
-	api/v1/auth.proto
+	api/user_v1/auth.proto

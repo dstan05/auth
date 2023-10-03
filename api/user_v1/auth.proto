@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/protocolbuffers/protobuf/examples/go/auth";
+option go_package = "github.com/dstan05/auth/pkg/grpc";
 
 service Auth {
   rpc Create(CreateRequest) returns (CreateResponse);
