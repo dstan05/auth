@@ -7,7 +7,7 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 import "google/protobuf/empty.proto";
 
-option go_package = "github.com/dstan05/auth/pkg/grpc";
+option go_package = "github.com/dstan05/auth/pkg/auth";
 
 service Auth {
   rpc Create(CreateRequest) returns (CreateResponse);
@@ -16,17 +16,17 @@ service Auth {
   rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
 }
 
+enum Role {
+  USER = 0;
+  ADMIN = 1;
+}
+
 message CreateRequest {
   google.protobuf.StringValue name = 1;
   google.protobuf.StringValue email = 2;
   string password = 3;
   string password_confirm = 4;
   Role role = 5;
-}
-
-enum Role {
-  USER = 0;
-  ADMIN = 1;
 }
 
 message CreateResponse {

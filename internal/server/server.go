@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	auth "github.com/dstan05/auth/pkg/grpc"
+	"github.com/dstan05/auth/pkg/auth"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 	"net"
@@ -11,29 +11,37 @@ import (
 const port = 1212
 
 type Server struct {
-	grps *grpc.Server
+	grps     *grpc.Server
+	listener net.Listener
 }
 
 func Init() (Server, error) {
 	server := Server{}
-	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
-
-	if err != nil {
-		return server, err
-	}
-
 	server.grps = grpc.NewServer()
-	reflection.Register(server.grps)
-	auth.RegisterAuthServer(server.grps, &Routes{})
-
-	if err = server.grps.Serve(lis); err != nil {
-		return server, err
-	}
-
 	return server, nil
 }
 
-func (server *Server) Stop() Server {
+func (server *Server) Run() error {
+	reflection.Register(server.grps)
+	auth.RegisterAuthServer(server.grps, &Routes{})
+
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%d", port))
+	if err != nil {
+		return err
+	}
+
+	if err = server.grps.Serve(lis); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (server *Server) Stop() (Server, error) {
 	server.grps.Stop()
-	return *server
+	if err := server.listener.Close(); err != nil {
+		return *server, err
+	}
+
+	return *server, nil
 }

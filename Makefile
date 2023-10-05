@@ -18,10 +18,10 @@ generate:
 	make generate-auth-api
 
 generate-auth-api:
-	mkdir -p pkg/grpc
+	mkdir -p pkg/auth
 	protoc --proto_path api/user_v1 \
-	--go_out=pkg/grpc --go_opt=paths=source_relative \
+	--go_out=pkg/auth --go_opt=paths=source_relative \
 	--plugin=protoc-gen-go=bin/protoc-gen-go \
-	--go-grpc_out=pkg/grpc --go-grpc_opt=paths=source_relative \
+	--go-grpc_out=pkg/auth --go-grpc_opt=paths=source_relative \
 	--plugin=protoc-gen-go-grpc=bin/protoc-gen-go-grpc \
 	api/user_v1/auth.proto
