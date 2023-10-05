@@ -18,7 +18,7 @@ func (r *Routes) Get(_ context.Context, req *auth.GetRequest) (*auth.GetResponse
 		Id:        req.Id,
 		Name:      wrapperspb.String(gofakeit.Name()),
 		Email:     wrapperspb.String(gofakeit.Email()),
-		Role:      auth.Role(gofakeit.RandomInt([]int{0, 1})),
+		Role:      auth.Role(gofakeit.RandomInt([]int{1, 2})),
 		CreatedAt: timestamppb.New(gofakeit.Date()),
 		UpdatedAt: timestamppb.New(gofakeit.Date()),
 	}
