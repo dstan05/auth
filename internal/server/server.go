@@ -30,6 +30,7 @@ func (server *Server) Run() error {
 		return err
 	}
 
+	server.listener = lis
 	if err = server.grps.Serve(lis); err != nil {
 		return err
 	}
