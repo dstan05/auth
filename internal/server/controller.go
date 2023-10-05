@@ -13,7 +13,7 @@ type Routes struct {
 	auth.UnimplementedAuthServer
 }
 
-func (s *Routes) Get(_ context.Context, req *auth.GetRequest) (*auth.GetResponse, error) {
+func (r *Routes) Get(_ context.Context, req *auth.GetRequest) (*auth.GetResponse, error) {
 	u := auth.GetResponse{
 		Id:        req.Id,
 		Name:      wrapperspb.String(gofakeit.Name()),
@@ -26,14 +26,14 @@ func (s *Routes) Get(_ context.Context, req *auth.GetRequest) (*auth.GetResponse
 	return &u, nil
 }
 
-func (s *Routes) Create(_ context.Context, _ *auth.CreateRequest) (*auth.CreateResponse, error) {
+func (r *Routes) Create(_ context.Context, _ *auth.CreateRequest) (*auth.CreateResponse, error) {
 	return &auth.CreateResponse{Id: gofakeit.Int64()}, nil
 }
 
-func (s *Routes) Update(_ context.Context, _ *auth.UpdateRequest) (*empty.Empty, error) {
+func (r *Routes) Update(_ context.Context, _ *auth.UpdateRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 
-func (s *Routes) Delete(_ context.Context, _ *auth.DeleteRequest) (*empty.Empty, error) {
+func (r *Routes) Delete(_ context.Context, _ *auth.DeleteRequest) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
