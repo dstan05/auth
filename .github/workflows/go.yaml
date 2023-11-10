@@ -12,7 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  CONTAINER_NAME: "auth-server-container"
+  CONTAINER_NAME: "auth-server-containers"
 
 # There is a single job in this workflow. It's configured to run on the latest available version of Ubuntu.
 jobs:
@@ -47,7 +47,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           labels: ${{ steps.meta.outputs.labels }}
   deploy-image:
     runs-on: ubuntu-latest
@@ -57,16 +57,19 @@ jobs:
       - name: Deploy to Selectel Cloud via SSH action
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: 194.87.82.189
-          username: root
-          password: 4dyFhQs098
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSHKEY }}
           envs: IMAGE_NAME,REGISTRY,GITHUB_SHA,CONTAINER_NAME
           script: |
-            # Set up variables
-            TAG_NAME=$(echo $GITHUB_SHA | head -c7)
-
             # Login into Selectel Registry
             docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }} $REGISTRY
 
+            # Stop running container
+            docker stop $CONTAINER_NAME
+
+            # Remove old container
+            docker rm $CONTAINER_NAME
+
             # Run a new container from a new image
-            docker run -d -p 50051:50051 --name $CONTAINER_NAME -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:pr-2
+            docker run -d -p 50051:1212 --name $CONTAINER_NAME -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
